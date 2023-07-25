@@ -1,10 +1,10 @@
 package com.example.jmonews.presentation.main.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.jmonews.databinding.FragmentHomeBinding
 import com.example.jmonews.presentation.main.home.section.OtherServiceSection
@@ -12,7 +12,10 @@ import com.example.jmonews.presentation.main.home.section.ProgramServiceSection
 import com.xwray.groupie.GroupieAdapter
 
 class HomeFragment : Fragment() {
-	private lateinit var binding: FragmentHomeBinding
+	private var _binding: FragmentHomeBinding? = null
+	private val binding get() = _binding!!
+
+
 	private lateinit var homeViewModel: HomeViewModel
 	private var adapter: GroupieAdapter? = null
 
@@ -21,12 +24,14 @@ class HomeFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		binding = FragmentHomeBinding.inflate(layoutInflater)
+		_binding = FragmentHomeBinding.inflate(inflater, container, false)
+		return binding.root
+	}
 
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
 		setupViewModel()
 		setupView()
-
-		return binding.root
 	}
 
 	private fun setupViewModel() {
@@ -37,10 +42,18 @@ class HomeFragment : Fragment() {
 		adapter = GroupieAdapter()
 		adapter?.apply {
 			clear()
-			add(ProgramServiceSection(requireActivity(), homeViewModel.getProgramServiceData()))
-			add(OtherServiceSection(homeViewModel.getOtherServiceData()))
-//			add(NewsHeadlinesSection(requireActivity(), newsViewModel, newsViewModel.newsHeadlines))
+			val programServiceData = homeViewModel.getProgramServiceData()
+			add(ProgramServiceSection(requireActivity(), programServiceData))
+
+			val otherServiceData = homeViewModel.getOtherServiceData()
+			add(OtherServiceSection(otherServiceData))
+//			add(InformationSection())
 		}
 		binding.rvHome.adapter = adapter
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		_binding = null
 	}
 }

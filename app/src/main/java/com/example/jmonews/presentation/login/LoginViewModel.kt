@@ -28,8 +28,12 @@ class LoginViewModel: ViewModel() {
 
 	fun validatePassword(password: String) {
 		if (password.isEmpty()) {
-			_passwordError.value = "Harap isi password Anda"
-		} else {
+			_passwordError.value = "Harap isi password Anda"} else
+		if(password.length < 8) {
+			_passwordError.value = "Panjang password kurang"
+		}
+
+		else {
 			_passwordError.value = null
 		}
 	}

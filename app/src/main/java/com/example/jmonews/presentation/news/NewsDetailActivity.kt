@@ -1,11 +1,13 @@
 package com.example.jmonews.presentation.news
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.jmonews.R
+import com.bumptech.glide.Glide
 import com.example.jmonews.data.model.news.Article
+import com.example.jmonews.data.util.dateConverter
 import com.example.jmonews.databinding.ActivityNewsDetailBinding
+import com.google.gson.Gson
 
 class NewsDetailActivity : AppCompatActivity() {
 	private lateinit var binding: ActivityNewsDetailBinding
@@ -20,23 +22,31 @@ class NewsDetailActivity : AppCompatActivity() {
 		binding = ActivityNewsDetailBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
+		setSupportActionBar(binding.toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 		newsDetailViewModel = ViewModelProvider(this)[NewsDetailViewModel::class.java]
 
-//		getIntentExtra()
-//		variableObserve()
+		getIntentExtra()
+		variableObserve()
 	}
 
-//	private fun variableObserve() {
-//		newsDetailViewModel.newsItem.observe(this) { item ->
-//			binding.titleTextView.text = item.title
-//			binding.descriptionTextView.text = item.description
-//		}
-//	}
-//
-//	private fun getIntentExtra() {
-//		val newsItem = intent.getParcelableExtra(EXTRA_NEWS_ITEM, )
-//		newsItem?.let {
-//			newsDetailViewModel.setNewsItem(it)
-//		}
-//	}
+	private fun variableObserve() {
+		newsDetailViewModel.newsItem.observe(this) { item ->
+			binding.tvTitle.text = item.title
+			binding.tvDescription.text = item.description
+			binding.tvDate.text = dateConverter(item.publishedAt)
+			Glide.with(this).load(item.urlToImage).into(binding.image)
+		}
+	}
+
+	private fun getIntentExtra() {
+		val articleJson = intent.getStringExtra(EXTRA_NEWS_ITEM)
+		val gson = Gson()
+		val article = gson.fromJson(articleJson, Article::class.java)
+
+		article?.let {
+			newsDetailViewModel.setNewsItem(it)
+		}
+	}
 }

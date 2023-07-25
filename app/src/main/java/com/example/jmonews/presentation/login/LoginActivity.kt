@@ -52,25 +52,21 @@ class LoginActivity : AppCompatActivity() {
 			val username = binding.etEmail.text.toString()
 			val password = binding.etPassword.text.toString()
 
-			val intent = Intent(this, MainActivity::class.java)
-			startActivity(intent)
-			finish()
-
-//			if (isEmailValid && isPasswordValid) {
-//				if (loginViewModel.login(username, password)) {
-//					val intent = Intent(this, MainActivity::class.java)
-//					startActivity(intent)
-//					finish()
-//				} else {
-//					// Handle login failure
-//					Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
-//					// TODO : Show Bottom Fragment
-//				}
-//			} else {
-//				// Show error messages for invalid input
-//				loginViewModel.validateEmail(username)
-//				loginViewModel.validatePassword(password)
-//			}
+			if (isEmailValid && isPasswordValid) {
+				if (loginViewModel.login(username, password)) {
+					val intent = Intent(this, MainActivity::class.java)
+					startActivity(intent)
+					finish()
+				} else {
+					// Handle login failure
+					Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
+					// TODO : Show Bottom Fragment
+				}
+			} else {
+				// Show error messages for invalid input
+				loginViewModel.validateEmail(username)
+				loginViewModel.validatePassword(password)
+			}
 		}
 	}
 }

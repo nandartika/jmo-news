@@ -14,18 +14,6 @@ class NewsHeadlinesAdapter(
 	RecyclerView.Adapter<NewsHeadlinesAdapter.ViewHolder>() {
 	private val articles = mutableListOf<Article>()
 
-//	private val callback = object : DiffUtil.ItemCallback<Article>() {
-//		override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-//			return oldItem.url == newItem.url
-//		}
-//
-//		override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-//			return oldItem == newItem
-//		}
-//	}
-
-//	val differ = AsyncListDiffer(this, callback)
-
 	override fun onCreateViewHolder(
 		parent: ViewGroup, viewType: Int
 	): ViewHolder {
